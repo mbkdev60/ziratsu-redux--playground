@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { getCatImg } from "../redux/reducers/dataImgReducer";
 
 export default function Counter() {
   const [cartData, setCartData] = useState(0);
-  const { count, cart } = useSelector((state) => ({
+  const { count, cart, imgURL } = useSelector((state) => ({
     ...state.AddCartReducer,
     ...state.CounterReducer,
+    ...state.dataImgReducer,
   }));
 
   const dispatch = useDispatch();
@@ -29,6 +31,10 @@ export default function Counter() {
     });
   };
 
+  useEffect(() => {
+    dispatch(getCatImg());
+  }, [dispatch]);
+
   return (
     <div>
       <h1>
@@ -43,6 +49,8 @@ export default function Counter() {
       />
       <br />
       <button onClick={AddToCartFunc}>Ajouter au panier</button>
+      <br />
+      {imgURL && <img style={{ width: "300px" }} src={imgURL} alt="Chat" />}
     </div>
   );
 }
